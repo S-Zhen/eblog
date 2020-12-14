@@ -1,9 +1,13 @@
 package com.critina.eblog.controller;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.critina.eblog.common.lang.Result;
 import com.critina.eblog.entity.User;
 import com.critina.eblog.util.ValidationUtil;
 import com.google.code.kaptcha.Producer;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +45,36 @@ public class AuthController extends BaseController {
     @GetMapping("/login")
     public String login() {
         return "/auth/login";
+    }
+
+    @ResponseBody
+    @PostMapping("/login")
+    public Result doLogin(String email, String password) {
+
+        //检验邮箱和密码
+        if(StrUtil.isBlank(email) || StrUtil.isBlank(password)) {
+            return Result.fail("邮箱或密码不能为空");
+        }
+
+        //使用shiro框架获得token(作为参数传入的邮箱和密码,其中密码是被md5加密的)
+        UsernamePasswordToken token = new UsernamePasswordToken(email, SecureUtil.md5(password));
+        try {
+            //传入token,基于shiro框架进行登录(登录细节的代码在AccountRealm.java中)
+            SecurityUtils.getSubject().login(token);
+        } catch (AuthenticationException e) {
+            if (e instanceof UnknownAccountException) {
+                return Result.fail("用户不存在");
+            } else if (e instanceof LockedAccountException) {
+                return Result.fail("用户被禁用");
+            } else if (e instanceof IncorrectCredentialsException) {
+                return Result.fail("密码错误");
+            } else {
+                return Result.fail("用户认证失败");
+            }
+        }
+
+        //登录成功并跳转到首页
+        return Result.success().action("/");
     }
 
     /**

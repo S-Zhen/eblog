@@ -3,6 +3,7 @@ package com.critina.eblog.service;
 import com.critina.eblog.common.lang.Result;
 import com.critina.eblog.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.critina.eblog.shiro.AccountProfile;
 
 /**
  * <p>
@@ -16,4 +17,5 @@ public interface UserService extends IService<User> {
 
     Result register(User user);
 
+    AccountProfile login(String username, String password);
 }
