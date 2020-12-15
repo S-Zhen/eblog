@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -132,6 +133,19 @@ public class AuthController extends BaseController {
         resp.setContentType("image/jpeg");
         ServletOutputStream outputStream = resp.getOutputStream();
         ImageIO.write(image, "jpg", outputStream);
+    }
+
+    /**
+    * @Description: 用户退出
+    * @Param: []
+    * @return: java.lang.String
+    * @Author: sunzhen
+    * @Date: 2020/12/14
+    */
+    @RequestMapping("/user/logout")
+    public String logout() {
+        SecurityUtils.getSubject().logout();
+        return "redirect:/";
     }
 
 

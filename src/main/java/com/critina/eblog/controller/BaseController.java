@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.critina.eblog.service.CommentService;
 import com.critina.eblog.service.PostService;
 import com.critina.eblog.service.UserService;
+import com.critina.eblog.shiro.AccountProfile;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 
@@ -35,6 +37,14 @@ public class BaseController {
         //页面大小设置，默认为2
         int size = ServletRequestUtils.getIntParameter(request, "size", 2);
         return new Page(pn, size);
+    }
+
+    protected AccountProfile getProfile() {
+        return (AccountProfile) SecurityUtils.getSubject().getPrincipal();
+    }
+
+    protected Long getProfileId() {
+        return getProfile().getId();
     }
 
 }

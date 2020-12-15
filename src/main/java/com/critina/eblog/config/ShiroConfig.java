@@ -50,14 +50,12 @@ public class ShiroConfig {
         filterFactoryBean.setSecurityManager(securityManager);
         // 配置登录的url和登录成功的url
         filterFactoryBean.setLoginUrl("/login");
-        filterFactoryBean.setSuccessUrl("/user/center");
+        filterFactoryBean.setSuccessUrl("/user/center"); //不知道为什么会无效
         // 配置未授权跳转页面
         filterFactoryBean.setUnauthorizedUrl("/error/403");
-
         filterFactoryBean.setFilters(MapUtil.of("auth", authFilter()));
 
         Map<String, String> hashMap = new LinkedHashMap<>();
-
         hashMap.put("/res/**", "anon");
 
         hashMap.put("/user/home", "auth");
