@@ -2,4 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.critina.eblog.mapper.UserMessageMapper">
 
+    <select id="selectMessages" resultType="com.critina.eblog.vo.UserMessageVo">
+        SELECT
+            m.*,
+            ( SELECT username FROM `user` WHERE id = m.from_user_id ) AS fromUserName,
+            ( SELECT title FROM `post` WHERE id = m.post_id ) AS postTitle,
+            ( SELECT content FROM `comment` WHERE id = m.comment_id ) AS commentContent,
+            (
+            SELECT
+                c2.content
+            FROM
+                `comment` AS c1
+                LEFT JOIN `comment` AS c2 ON c1.parent_id = c2.id
+            WHERE
+                c1.id = m.comment_id
+            ) AS commentParentContent
+        FROM
+            `user_message` m
+
+        ${ew.customSqlSegment}
+    </select>
+
 </mapper>

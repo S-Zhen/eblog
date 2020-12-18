@@ -1,9 +1,7 @@
 package com.critina.eblog.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.critina.eblog.service.CommentService;
-import com.critina.eblog.service.PostService;
-import com.critina.eblog.service.UserService;
+import com.critina.eblog.service.*;
 import com.critina.eblog.shiro.AccountProfile;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,12 @@ public class BaseController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    UserCollectionService userCollectionService;
+
+    @Autowired
+    UserMessageService userMessageService;
 
     public Page getPage() {
         //页数设置，默认为1

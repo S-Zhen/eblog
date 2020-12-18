@@ -8,9 +8,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.critina.eblog.common.lang.Result;
 import com.critina.eblog.entity.Post;
 import com.critina.eblog.entity.User;
+import com.critina.eblog.entity.UserCollection;
 import com.critina.eblog.entity.UserMessage;
 import com.critina.eblog.shiro.AccountProfile;
 import com.critina.eblog.util.UploadUtil;
+import com.critina.eblog.vo.UserCollectionVo;
+import com.critina.eblog.vo.UserMessageVo;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController extends BaseController {
@@ -58,7 +62,7 @@ public class UserController extends BaseController {
     public Result doSet(User user) {
 
         //修改头像
-        if(StrUtil.isNotBlank(user.getAvatar())) {
+        if (StrUtil.isNotBlank(user.getAvatar())) {
 
             User temp = userService.getById(getProfileId());
             temp.setAvatar(user.getAvatar());
@@ -73,13 +77,13 @@ public class UserController extends BaseController {
         }
 
         //修改用户基本信息
-        if(StrUtil.isBlank(user.getUsername())) {
+        if (StrUtil.isBlank(user.getUsername())) {
             return Result.fail("昵称不能为空");
         }
         int count = userService.count(new QueryWrapper<User>()
                 .eq("username", getProfile().getUsername())
                 .ne("id", getProfileId()));
-        if(count > 0) {
+        if (count > 0) {
             return Result.fail("改昵称已被占用");
         }
 
@@ -106,14 +110,14 @@ public class UserController extends BaseController {
     @ResponseBody
     @PostMapping("/user/repass")
     public Result repass(String nowpass, String pass, String repass) {
-        if(!pass.equals(repass)) {
+        if (!pass.equals(repass)) {
             return Result.fail("两次密码不相同");
         }
 
         User user = userService.getById(getProfileId());
 
         String nowPassMd5 = SecureUtil.md5(nowpass);
-        if(!nowPassMd5.equals(user.getPassword())) {
+        if (!nowPassMd5.equals(user.getPassword())) {
             return Result.fail("密码不正确");
         }
 
@@ -129,7 +133,14 @@ public class UserController extends BaseController {
         return "/user/index";
     }
 
-    /*@ResponseBody
+    /**
+     * @Description: 用户中心-我发的贴
+     * @Param: []
+     * @return: com.critina.eblog.common.lang.Result
+     * @Author: sunzhen
+     * @Date: 2020/12/16
+     */
+    @ResponseBody
     @GetMapping("/user/public")
     public Result userP() {
         IPage page = postService.page(getPage(), new QueryWrapper<Post>()
@@ -139,32 +150,40 @@ public class UserController extends BaseController {
         return Result.success(page);
     }
 
+    /**
+     * @Description: 用户中心-我收藏的贴
+     * @Param: []
+     * @return: com.critina.eblog.common.lang.Result
+     * @Author: sunzhen
+     * @Date: 2020/12/16
+     */
     @ResponseBody
     @GetMapping("/user/collection")
     public Result collection() {
-        IPage page = postService.page(getPage(), new QueryWrapper<Post>()
-                .inSql("id", "SELECT post_id FROM user_collection where user_id = " + getProfileId())
+        IPage<UserCollectionVo> page = userCollectionService.paging(getPage(), new QueryWrapper<UserCollection>()
+                .eq("c.user_id", getProfileId())
+                .orderByDesc("c.created")
         );
         return Result.success(page);
-    }*/
+    }
 
-    /*@GetMapping("/user/mess")
+    @GetMapping("/user/mess")
     public String mess() {
 
-        IPage<UserMessageVo> page = messageService.paging(getPage(), new QueryWrapper<UserMessage>()
+        IPage<UserMessageVo> page = userMessageService.paging(getPage(), new QueryWrapper<UserMessage>()
                 .eq("to_user_id", getProfileId())
                 .orderByDesc("created")
         );
 
         // 把消息改成已读状态
         List<Long> ids = new ArrayList<>();
-        for(UserMessageVo messageVo : page.getRecords()) {
-            if(messageVo.getStatus() == 0) {
+        for (UserMessageVo messageVo : page.getRecords()) {
+            if (messageVo.getStatus() == 0) {
                 ids.add(messageVo.getId());
             }
         }
         // 批量修改成已读
-        messageService.updateToReaded(ids);
+        userMessageService.updateToReaded(ids);
 
         request.setAttribute("pageData", page);
         return "/user/mess";
@@ -175,7 +194,7 @@ public class UserController extends BaseController {
     public Result msgRemove(Long id,
                             @RequestParam(defaultValue = "false") Boolean all) {
 
-        boolean remove = messageService.remove(new QueryWrapper<UserMessage>()
+        boolean remove = userMessageService.remove(new QueryWrapper<UserMessage>()
                 .eq("to_user_id", getProfileId())
                 .eq(!all, "id", id));
 
@@ -186,12 +205,12 @@ public class UserController extends BaseController {
     @RequestMapping("/message/nums/")
     public Map msgNums() {
 
-        int count = messageService.count(new QueryWrapper<UserMessage>()
+        int count = userMessageService.count(new QueryWrapper<UserMessage>()
                 .eq("to_user_id", getProfileId())
                 .eq("status", "0")
         );
         return MapUtil.builder("status", 0)
                 .put("count", count).build();
-    }*/
+    }
 
 }

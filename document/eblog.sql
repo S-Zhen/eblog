@@ -175,7 +175,7 @@ CREATE TABLE `m_user_collection` (
 DROP TABLE IF EXISTS `m_user_message`;
 CREATE TABLE `m_user_message` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `from_user_id` bigint(20) NOT NULL COMMENT '发送消息的用户ID',
+  `from_user_id` bigint(20) COMMENT '发送消息的用户ID',
   `to_user_id` bigint(20) NOT NULL COMMENT '接收消息的用户ID',
   `post_id` bigint(20) DEFAULT NULL COMMENT '消息可能关联的帖子',
   `comment_id` bigint(20) DEFAULT NULL COMMENT '消息可能关联的评论',

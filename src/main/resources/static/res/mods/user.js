@@ -64,7 +64,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       elemUCM.children().eq(index).find('ul').html(res.rows.length === 0 ? '<div class="fly-msg">没有相关数据</div>' : html);
     };
 
-    var page = function(now){
+    /*var page = function(now){
       var curr = now || 1;
       if(gather.minelog[type + '-page-' + curr]){
         view(gather.minelog[type + '-page-' + curr]);
@@ -127,7 +127,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
           });
         }
       }
-    };
+    };*/
 
     if(!gather.minelog[type]){
       page();
@@ -330,12 +330,13 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     //阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
       var othis = $(this).parents('li'), id = othis.data('id');
-      fly.json('/message/remove/', {
+      fly.json('/msg/remove/', {
         id: id
       }, function(res){
         if(res.status === 0){
-          othis.remove();
-          delEnd();
+          /*othis.remove();
+          delEnd();*/
+          location.reload();
         }
       });
     });
@@ -344,13 +345,14 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
       layer.confirm('确定清空吗？', function(index){
-        fly.json('/message/remove/', {
+        fly.json('/msg/remove/', {
           all: true
         }, function(res){
           if(res.status === 0){
-            layer.close(index);
+            /*layer.close(index);
             othis.addClass('layui-hide');
-            delEnd(true);
+            delEnd(true);*/
+            location.reload();
           }
         });
       });
