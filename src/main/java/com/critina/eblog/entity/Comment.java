@@ -31,7 +31,7 @@ public class Comment extends BaseEntity {
     private Long parentId;
 
     /**
-     * 评论的内容ID
+     * 评论的帖子ID
      */
     private Long postId;
 

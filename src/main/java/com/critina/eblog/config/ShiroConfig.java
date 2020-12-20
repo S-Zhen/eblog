@@ -53,6 +53,7 @@ public class ShiroConfig {
         filterFactoryBean.setSuccessUrl("/user/center"); //不知道为什么会无效
         // 配置未授权跳转页面
         filterFactoryBean.setUnauthorizedUrl("/error/403");
+        //设置自定义过滤器
         filterFactoryBean.setFilters(MapUtil.of("auth", authFilter()));
 
         Map<String, String> hashMap = new LinkedHashMap<>();

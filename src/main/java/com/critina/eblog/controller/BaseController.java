@@ -17,6 +17,11 @@ import javax.servlet.http.HttpServletRequest;
  **/
 public class BaseController {
 
+    //分页参数：默认页数
+    public final static Long PAGE_CURRENT = 1L;
+    //分页参数：默认每页大小
+    public final static Long PAGE_SIZE = 2L;
+
     @Autowired
     HttpServletRequest request;
 
@@ -35,12 +40,36 @@ public class BaseController {
     @Autowired
     UserMessageService userMessageService;
 
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    WsService wsService;
+
+    /**
+    * @Description: 获取由前端传来参数的page
+    * @Param: []
+    * @return: com.baomidou.mybatisplus.extension.plugins.pagination.Page
+    * @Author: sunzhen
+    * @Date: 2020/12/19
+    */
     public Page getPage() {
         //页数设置，默认为1
-        int pn = ServletRequestUtils.getIntParameter(request, "pn", 1);
+        int pn = ServletRequestUtils.getIntParameter(request, "pn", PAGE_CURRENT.intValue());
         //页面大小设置，默认为2
-        int size = ServletRequestUtils.getIntParameter(request, "size", 2);
+        int size = ServletRequestUtils.getIntParameter(request, "size", PAGE_SIZE.intValue());
         return new Page(pn, size);
+    }
+
+    /**
+    * @Description: 获得默认参数的page
+    * @Param: []
+    * @return: com.baomidou.mybatisplus.extension.plugins.pagination.Page
+    * @Author: sunzhen
+    * @Date: 2020/12/19
+    */
+    public Page getDefaultPage() {
+        return new Page(PAGE_CURRENT, PAGE_SIZE);
     }
 
     protected AccountProfile getProfile() {

@@ -33,14 +33,14 @@
                               <#--${mess.fromUserName} 评论了你的文章 (${mess.postTitle})，内容是 (${mess.content})-->
                                   <a href="/user/${mess.fromUserId}">${mess.fromUserName}</a> 评论了你的文章</br>
                                   文章：<a href="/post/${mess.postId}">${mess.postTitle}</a></br>
-                                  评论内容：${mess.commentContent}
+                                  评论内容：${mess.content}
                               </#if>
                               <#if mess.type == 2>
                               <#--${mess.fromUserName} 回复了你的评论 (${mess.content})，文章是 (${mess.postTitle})-->
-                                  <a href="/user/${mess.fromUserId}">${mess.fromUserName}</a> 回复了你的评论</br>
+                                  <a href="/user/${mess.fromUserId}">${mess.fromUserName}</a> 回复了评论</br>
                                   文章：<a href="/post/${mess.postId}">${mess.postTitle}</a></br>
-                                  你的评论：${mess.commentParentContent}</br>
-                                  回复内容：${mess.commentContent}
+                                  之前的评论：${mess.commentParentContent}</br>
+                                  回复内容：${mess.content}
                               </#if>
                           </blockquote>
                           <p><span>${timeAgo(mess.created)}</span><a href="javascript:;"
