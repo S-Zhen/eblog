@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.critina.eblog.service.*;
 import com.critina.eblog.shiro.AccountProfile;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 
@@ -45,6 +46,12 @@ public class BaseController {
 
     @Autowired
     WsService wsService;
+
+    @Autowired
+    SearchService searchService;
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
 
     /**
     * @Description: 获取由前端传来参数的page

@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.critina.eblog.common.lang.Result;
+import com.critina.eblog.config.RabbitConfig;
 import com.critina.eblog.entity.*;
+import com.critina.eblog.search.mq.PostMqIndexMessage;
 import com.critina.eblog.util.ValidationUtil;
 import com.critina.eblog.vo.CommentVo;
 import com.critina.eblog.vo.PostVo;
@@ -176,8 +178,8 @@ public class PostController extends BaseController {
         }
 
         // 通知消息给mq，告知更新或添加
-        /*amqpTemplate.convertAndSend(RabbitConfig.es_exchage, RabbitConfig.es_bind_key,
-                new PostMqIndexMessage(post.getId(), PostMqIndexMessage.CREATE_OR_UPDATE));*/
+        amqpTemplate.convertAndSend(RabbitConfig.ES_EXCHANGE, RabbitConfig.ES_BIND_KEY,
+                new PostMqIndexMessage(post.getId(), PostMqIndexMessage.CREATE_OR_UPDATE));
 
         return Result.success().action("/post/" + post.getId());
     }
@@ -197,8 +199,8 @@ public class PostController extends BaseController {
         userMessageService.removeByMap(MapUtil.of("post_id", id));
         userCollectionService.removeByMap(MapUtil.of("post_id", id));
 
-        /*amqpTemplate.convertAndSend(RabbitConfig.es_exchage, RabbitConfig.es_bind_key,
-                new PostMqIndexMessage(post.getId(), PostMqIndexMessage.REMOVE));*/
+        amqpTemplate.convertAndSend(RabbitConfig.ES_EXCHANGE, RabbitConfig.ES_BIND_KEY,
+                new PostMqIndexMessage(post.getId(), PostMqIndexMessage.REMOVE));
 
         return Result.success().action("/user/index");
     }

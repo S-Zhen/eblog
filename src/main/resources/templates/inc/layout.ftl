@@ -13,6 +13,7 @@
         <script src="/res/js/jquery.min.js"></script>
         <script src="/res/js/sockjs.js"></script>
         <script src="/res/js/stomp.js"></script>
+        <script src="/res/js/commom.js"></script>
     </head>
     <body>
 

@@ -48,7 +48,7 @@ public class AdminController extends BaseController {
         return Result.success();
     }
 
-    /*@ResponseBody
+    @ResponseBody
     @PostMapping("/initEsData")
     public Result initEsData() {
 
@@ -74,7 +74,7 @@ public class AdminController extends BaseController {
         }
 
         return Result.success("ES索引初始化成功，共 " + total + " 条记录！", null);
-    }*/
+    }
 
 
 }

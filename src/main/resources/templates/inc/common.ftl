@@ -17,7 +17,12 @@
               ,jump: function(obj, first){
                 //首次不执行
                 if(!first){
-                  location.href = "?pn=" + obj.curr;
+                  let questionStr = GetQueryString("q");
+                  if(isEmpty(questionStr)){
+                    location.href = "?pn=" + obj.curr;
+                  }else{ //当存在搜索问题的参数时需要加上参数再分页
+                    location.href = "?pn=" + obj.curr + "&q=" + questionStr;
+                  }
                 }
               }
             });

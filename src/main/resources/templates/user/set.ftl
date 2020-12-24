@@ -23,9 +23,9 @@
                 <li lay-id="pass">密码</li>
                 <#--<li lay-id="bind">帐号绑定</li>-->
 
-                <#--<@shiro.hasRole name="admin">
+                <@shiro.hasRole name="admin">
                 <li lay-id="es">同步ES</li>
-                </@shiro.hasRole>-->
+                </@shiro.hasRole>
             </ul>
             <div class="layui-tab-content" style="padding: 20px 0;">
                 <div class="layui-form layui-form-pane layui-tab-item layui-show">
@@ -101,6 +101,14 @@
                     </form>
                 </div>
 
+                <@shiro.hasRole name="admin">
+                    <div class="layui-form layui-form-pane layui-tab-item">
+                        <form action="/admin/initEsData" method="post">
+                            <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true">同步ES数据</button>
+                        </form>
+                    </div>
+                </@shiro.hasRole>
+
                 <#--<div class="layui-form layui-form-pane layui-tab-item">
                     <ul class="app-bind">
                         <li class="fly-msg app-havebind">
@@ -122,13 +130,7 @@
                     </ul>
                 </div>-->
 
-                <#--<@shiro.hasRole name="admin">
-                    <div class="layui-form layui-form-pane layui-tab-item">
-                        <form action="/admin/initEsData" method="post">
-                            <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit alert="true">同步ES数据</button>
-                        </form>
-                    </div>
-                </@shiro.hasRole>-->
+
             </div>
 
         </div>

@@ -16,6 +16,17 @@ spring:
     host: 172.16.83.89
     port: 6379
     password:
+  data:
+    elasticsearch:
+      cluster-name: es_sz
+      cluster-nodes: 172.16.83.89:9300
+      repositories:
+        enabled: true
+  rabbitmq:
+    username: root
+    password: 123456
+    host: 172.16.83.89
+    port: 5672
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
 file:
