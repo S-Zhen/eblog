@@ -53,6 +53,9 @@ public class BaseController {
     @Autowired
     AmqpTemplate amqpTemplate;
 
+    @Autowired
+    ChatService chatService;
+
     /**
     * @Description: 获取由前端传来参数的page
     * @Param: []

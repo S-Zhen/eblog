@@ -78,6 +78,8 @@ public class ShiroConfig {
         hashMap.put("/post/delete", "auth");
         hashMap.put("/post/reply/", "auth");
 
+        hashMap.put("/chat/getMineAndGroupData", "anon");
+        hashMap.put("/chat/getGroupHistoryMsg", "anon");
         hashMap.put("/websocket", "anon");
         hashMap.put("/login", "anon");
         filterFactoryBean.setFilterChainDefinitionMap(hashMap);
